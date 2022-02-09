@@ -4604,6 +4604,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
     std::vector<CBigNum> vBlockSerials;
     // TODO: Check if this is ok... blockHeight is always the tip or should we look for the prevHash and get the height?
     int blockHeight = chainActive.Height() + 1;
+    fColdStakingActive = blockHeight < sporkManager.GetSporkValue(SPORK_21_REMOVE_COLDSTALING_BLOCK);
     for (const CTransaction& tx : block.vtx) {
         if (!CheckTransaction(
                 tx,

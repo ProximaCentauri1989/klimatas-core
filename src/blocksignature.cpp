@@ -5,6 +5,7 @@
 
 #include "blocksignature.h"
 #include "main.h"
+#include "spork.h"
 #include "zktschain.h"
 
 bool SignBlockWithKey(CBlock& block, const CKey& key)
@@ -19,11 +20,12 @@ bool GetKeyIDFromUTXO(const CTxOut& txout, CKeyID& keyID)
 {
     std::vector<valtype> vSolutions;
     txnouttype whichType;
+    const bool fColdStakeDisabled = sporkManager.IsSporkActive(SPORK_21_REMOVE_COLDSTALING_TIMESTAMP)
     if (!Solver(txout.scriptPubKey, whichType, vSolutions))
         return false;
     if (whichType == TX_PUBKEY) {
         keyID = CPubKey(vSolutions[0]).GetID();
-    } else if (whichType == TX_PUBKEYHASH || whichType == TX_COLDSTAKE) {
+    } else if (whichType == TX_PUBKEYHASH || whichType == TX_COLDSTAKE && !fColdStakeDisabled) {
         keyID = CKeyID(uint160(vSolutions[0]));
     } else {
         return false;
@@ -83,7 +85,7 @@ bool CheckBlockSignature(const CBlock& block)
         if (whichType == TX_PUBKEY || whichType == TX_PUBKEYHASH) {
             valtype& vchPubKey = vSolutions[0];
             pubkey = CPubKey(vchPubKey);
-        } else if (whichType == TX_COLDSTAKE) {
+        } else if (whichType == TX_COLDSTAKE && !sporkManager.IsSporkActive(SPORK_21_REMOVE_COLDSTALING_TIMESTAMP)) {
             // pick the public key from the P2CS input
             const CTxIn& txin = block.vtx[1].vin[0];
             int start = 1 + (int) *txin.scriptSig.begin(); // skip sig

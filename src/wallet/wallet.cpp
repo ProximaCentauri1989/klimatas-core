@@ -1758,6 +1758,9 @@ CAmount CWallet::GetColdStakingBalance() const
 
 CAmount CWallet::GetStakingBalance(const bool fIncludeColdStaking) const
 {
+    if (sporkManager.IsSporkActive(SPORK_21_REMOVE_COLDSTALING_TIMESTAMP)){
+        fIncludeColdStaking = false
+    }
     return GetBalance() + (fIncludeColdStaking ? GetColdStakingBalance() : 0);
 }
 
