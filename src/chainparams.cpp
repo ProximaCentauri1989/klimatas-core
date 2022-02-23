@@ -177,10 +177,10 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 4-byte int at any alignment.
          */
-        pchMessageStart[0] = 0x4f;
-        pchMessageStart[1] = 0xc1;
-        pchMessageStart[2] = 0x99;
-        pchMessageStart[3] = 0x7d;
+        pchMessageStart[0] = 0x50;
+        pchMessageStart[1] = 0x45;
+        pchMessageStart[2] = 0x4e;
+        pchMessageStart[3] = 0x59;
         vAlertPubKey = ParseHex("045f7f85ddbc09b807f0d41256333e5be4849c43df16febdb8e0f158b5f743cb552c956cf9232d6dcf7da9ee841517bfbb129d02f83d9c6b61616725d77382a2b6");
         nDefaultPort = 10300;
         bnProofOfWorkLimit = ~uint256(0) >> 20; // KTS starting difficulty is 1 / 2^12
@@ -204,7 +204,7 @@ public:
         nMasternodeCountDrift = 20;
         nMaxMoneyOut = 23000000 * COIN;
         nMinColdStakingAmount = 1 * COIN;
-        vEcoFundAddress = "KJbUDa4JHKo59UWTfzKJFAVCsSVnrP8t8j";
+        vEcoFundAddress = "KMdL6ZY8dX7CyyZCh1RBhYuqA56jtzw5zC";
 
         /** Height or Time Based Activations **/
         nLastPOWBlock = 2880;
@@ -277,6 +277,14 @@ public:
         vSeeds.push_back(CDNSSeedData("seed4.klimatas.com", "seed4.klimatas.com"));         // Single node address
         vSeeds.push_back(CDNSSeedData("seed5.klimatas.com", "seed5.klimatas.com"));         // Single node address
         vSeeds.push_back(CDNSSeedData("seed6.klimatas.com", "seed6.klimatas.com"));         // Single node address
+        vSeeds.push_back(CDNSSeedData("65.21.125.243", "65.21.125.243"));
+        vSeeds.push_back(CDNSSeedData("165.21.32.236", "65.21.32.236"));
+        vSeeds.push_back(CDNSSeedData("65.21.206.185", "65.21.206.185"));
+        vSeeds.push_back(CDNSSeedData("65.21.203.50", "165.21.203.50"));
+        vSeeds.push_back(CDNSSeedData("135.181.5.146", "135.181.5.146"));
+        vSeeds.push_back(CDNSSeedData("135.181.208.187", "135.181.208.187"));
+        vSeeds.push_back(CDNSSeedData("135.181.17.220", "135.181.17.220"));
+        vSeeds.push_back(CDNSSeedData("135.181.18.41", "135.181.18.41"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 45);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 15);

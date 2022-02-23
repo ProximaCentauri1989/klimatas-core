@@ -1342,7 +1342,9 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
     // Check transaction
     int chainHeight = chainActive.Height();
-    bool fColdStakingActive = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT);
+    bool fColdStakingActive = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) && 
+                              chainHeight < sporkManager.GetSporkValue(SPORK_21_COLDSTAKING_DISABLING);
+                              
     if (!CheckTransaction(tx, chainHeight >= Params().Zerocoin_StartHeight(), true, state, isBlockBetweenFakeSerialAttackRange(chainHeight), fColdStakingActive))
         return state.DoS(100, error("%s : CheckTransaction failed", __func__), REJECT_INVALID, "bad-tx");
 
@@ -4600,7 +4602,10 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
         }
     }
 
-    fColdStakingActive = sporkManager.IsSporkActive(SPORK_21_COLDSTAKING_REMOVAL) ? false : true;
+    // disable cold stake in a safe way
+    if (nHeight >= sporkManager.GetSporkValue(SPORK_21_COLDSTAKING_DISABLING)) {
+        fColdStakingActive = false;
+    }
 
     // Check transactions
     std::vector<CBigNum> vBlockSerials;
